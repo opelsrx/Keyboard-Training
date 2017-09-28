@@ -1,0 +1,15 @@
+version: "3"
+services:
+  nginx:
+    restart: always
+    image: nginx:1.13
+    ports:
+      - "8000:80"
+    volumes:
+      - ./src:/src
+      - ./conf/nginx.conf:/etc/nginx/conf.d/default.conf
+  php:
+    restart: always
+    image: php:7.1-fpm
+    volumes:
+      - ./src:/src
