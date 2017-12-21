@@ -58,7 +58,8 @@ let ctx;
 
 // Initial page setup with eventlisteners etc.
 function pageSetup()
-{   //Event setup
+{
+    //Event setup
     document.getElementById("textSelection").addEventListener("change", showText);
     document.getElementById("swe").addEventListener("change", addOptions);
     document.getElementById("eng").addEventListener("change", addOptions);
@@ -142,7 +143,7 @@ function startChallenge()
     clearGame();
 
     document.getElementById("input").removeAttribute("disabled");
-    document.getElementById("input").addEventListener("keydown", updateStatsObject);
+    document.getElementById("input").addEventListener("input", updateStatsObject);
     document.getElementById("input").focus();
     document.getElementById(0).setAttribute("class", "currentChar");
 
@@ -180,9 +181,6 @@ function updateStats()
 
     elapsedSec = parseInt((elapsedSec / 1000), 10);
     let elapsedMin = elapsedSec/60;
-
-    
-    
     lastY = 100 - stats.netWPM;
 
     stats.grossWPM = parseInt((stats.totalCharsTyped / 5)/elapsedMin, 10);
@@ -209,20 +207,21 @@ function updateStatsObject(event)
     }
     if(stats.currentChar < currentTextLength)
     {
-        let char = document.getElementById(stats.currentChar).innerHTML;
-        let key = event.key;
+        
+        let charExpected = document.getElementById(stats.currentChar).innerHTML;
+        let charPressed = event.data;
         let checked = document.getElementById("casing").checked;
 
-        if(key != "Shift")
+        if(charPressed != "Shift")
         {
-            if(char == key)
+            if(charExpected == charPressed)
             { 
                 document.getElementById(stats.currentChar).setAttribute("class", "correct");
                 correctSound.pause();
                 correctSound.currentTime = 0;
                 correctSound.play();
             }
-            else if(char.toUpperCase() == key.toUpperCase() && checked)
+            else if(charExpected.toUpperCase() == charPressed.toUpperCase() && checked)
             {
                 document.getElementById(stats.currentChar).setAttribute("class", "correct");
                 correctSound.pause();
@@ -240,7 +239,7 @@ function updateStatsObject(event)
             stats.totalCharsTyped++;
             stats.currentChar++;
             
-            if(key == " ") { document.getElementById("input").value = ""; }
+            if(charPressed == " ") { document.getElementById("input").value = ""; }
         }
     }
     if(stats.currentChar == currentTextLength)
