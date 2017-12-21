@@ -167,13 +167,12 @@ function clearGame()
 }
 function stopChallenge()
 {
+    updateStats();  // last update to make sure the correct stats are displayed
     document.getElementById("stop").setAttribute("id", "start");
     document.getElementById("input").setAttribute("disabled", true);
-    document.getElementById("errors").innerHTML = stats.errors;
     ctx.closePath();
     clearInterval(timer);
 }
-
 function updateStats()
 {
     let d = new Date();
