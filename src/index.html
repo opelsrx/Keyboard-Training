@@ -1,22 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  
-  <link rel="stylesheet" type="text/css" href="style/style.css">
-  
-  <title>Privat projekt</title>
-</head>
-<body>
-	
-	<div class="navbar">
-		<h1>Mina egna projekt kommer presenteras på denna sida</h1>
-	</div>
-	<div class="main-content">
-		<h3>Här är huvudinnehållet</h3>
-		<a href="test.html">länk till ny fil</a>
-	</div>
-</body>
+
+<html>
+    
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <title>Typewriter challenge</title>
+    
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <script src="js/main.js"></script> 
+    </head>
+
+    <body>
+        <header id="bodyHeader">
+            
+            <img alt="logotype" src="img/logo.png"/>
+            <label><span>Typewriter</span> <span>challenge</span></label>
+
+        </header>
+
+        <main>
+            <header id="mainHeader">
+                <form>
+                    <div><input type="checkbox" id="casing"><label class="settingsText">Ignore casing</label></div>
+                    <input type="radio" name="language" checked="checked" id="swe"><label class="settingsText">Swedish</label>
+                    <input type="radio" name="language" id="eng"><label class="settingsText">English</label>
+                </form>
+
+                <div id="textChoice">
+                    <label>Choose text</label>
+                    <select id="textSelection">
+                    </select>
+                </div>
+            </header>
+            <div id="textArea">
+                <h1 id="textHeader"></h1>
+                <h4 id="textAuthor"></h4>
+                <p id="theText"></p>
+            </div>
+
+            <div id="inputField">
+                <input id="input" type="text" placeholder="Type here..." disabled="true"/>
+            </div>
+
+            <div id="stats">
+                <canvas id="myCanvas"></canvas>
+                <div class="rows">
+                    <label>Gross WPM: <span id="gross"></span></label>
+                    <label>Accuracy: <span id="accuracy"></span></label>
+                </div>
+                <div class="rows">
+                    <label>Net WPM: <span id="net"></span></label>
+                    <label>Errors: <span id="errors"></span></label>
+                </div>
+
+            </div>
+        </main>
+
+        <footer>
+            <div><small>&copy; Copyright 2058, Typewriter, Est 2017</small></div>
+            <a href="mailto:maha1611@student.miun.se"><small></small>Contact me</a>
+        </footer>
+    </body>
+
 </html>
