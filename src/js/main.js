@@ -7,47 +7,11 @@
  * maha1611
  * maha1611@student.miun.se
  ******************************************************************************/
-var gameComplete = new Audio('./audio/complete.mp3');
-var errorSound = new Audio('./audio/error.mp3');
-var correctSound = new Audio('./audio/correct.mp3');
-
-let text1 = {};
-text1.title = "Doktor Glas"
-text1.author = "Hjalmar Söderberg";
-text1.language = "swedish";
-text1.text = "Jag stod vid pastor Gregorius bädd; han låg sjuk. Övre delen av hans kropp var blottad, och jag lyssnade på hans hjärta. Sängen stod i hans arbetsrum; en kammarorgel stod i ett hörn, och någon spelade på den. Ingen koral, knappt en melodi. Bara formlösa fugaartade tongångar fram och tillbaka. En dörr stod öppen; det oroade mig, men jag kunde inte komma mig för att få den stängd.";
-
-let text2 = {};
-text2.title = "Förändringens Tid";
-text2.author = "Erik Strom";
-text2.language = "swedish";
-text2.text = "Vinden viner över sällsamma ruiner, över berg och slätter, dagar som nätter. Ger världen form inför den kommande storm, likt gudars sång, skall bli dess undergång. Svart som natten, blank likt vatten, i skyn du häver då Allfader kräver. Åter resas skall nu han, som i misteln döden fann. Sonas med sin ene broder, den blinde född av samma moder. Satt att råda är de båda, bröders hand över evigt land.";
-
-let text3 = {};
-text3.title = "Moln";
-text3.author = "Karin Boye";
-text3.language = "swedish";
-text3.text = "Se de mäktiga moln, vilkas fjärran höga toppar stolta, skimrande resa sig, vita som vit snö! Lugna glida de fram för att slutligen lugnt dö sakta lösande sig i en skur av svala droppar. Majestätiska moln - genom livet, genom döden gå de leende fram i en strålande sols sken utan skymmande oro i eter så klart ren, gå med storstilat, stilla förakt för sina öden.";
-
-let text4 = {};
-text4.title = "Katherine";
-text4.author = "Abraham Lincoln";
-text4.language = "english";
-text4.text = "I am not bound to win, but I am bound to be true. I am not bound to succeed, but I am bound to live by the light that I have. I must stand with anybody that stands right, and stand with him while he is right, and part with him when he goes wrong.";
-
-let text5 = {};
-text5.title = "Integrity";
-text5.author = "Francis Bacon";
-text5.language = "english";
-text5.text = "It's not what we eat but what we digest that makes us strong; not what we gain but what we save that makes us rich; not what we read but what we remember that makes us learned; and not what we profess but what we practice that gives us integrity.";
-
-let text6 = {};
-text6.title = "hej";
-text6.author = "lej";
-text6.language = "swedish";
-text6.text = "haj på daj, jag heter kaj.";
-
-let texts = [text1, text2, text3, text4, text5, text6];
+let gameComplete = new Audio('./audio/complete.mp3');
+let errorSound = new Audio('./audio/error.mp3');
+let correctSound = new Audio('./audio/correct.mp3');
+let xmlFile;
+let texts = [];
 
 let stats; // Contains the statistics of the game
 let timer;
@@ -55,6 +19,37 @@ let startTime;  // Game started at this time
 let currentTextLength;  // The chosen texts length
 let lastX = 0, lastY = 100;
 let ctx;
+let xhttp = new XMLHttpRequest();
+
+xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       // Typical action to be performed when the document is ready:
+        xmlFile = xhttp.responseXML;
+
+        let length = xmlFile.getElementsByTagName("author").length;
+
+        for(let i = 0; i < length; i++)
+        {
+            let tempObj = {};
+
+            tempObj.title = xmlFile.getElementsByTagName("title")[i].innerHTML;
+            tempObj.author = xmlFile.getElementsByTagName("author")[i].innerHTML;
+            tempObj.language = xmlFile.getElementsByTagName("language")[i].innerHTML;
+            tempObj.text = xmlFile.getElementsByTagName("text")[i].innerHTML;
+            texts.push(tempObj);
+        }
+        pageSetup(); // When the xml is loaded successfully set up the page.
+    }
+};
+
+function loadXML()
+{
+    //Loads the xml-files
+    xhttp.open("GET", "xml/texts.xml", true);
+    xhttp.responseType = "document";
+    xhttp.send();
+}
+
 
 // Initial page setup with eventlisteners etc.
 function pageSetup()
@@ -155,6 +150,10 @@ function startChallenge()
 }
 function clearGame()
 {
+    document.getElementById("textSelection").setAttribute("disabled", true);
+    document.getElementById("swe").setAttribute("disabled", true);
+    document.getElementById("eng").setAttribute("disabled", true);
+    // Removes the red, green text color and grey background
     for(let i = 0; i < currentTextLength; i++)
     {
         document.getElementById(i).removeAttribute("class");
@@ -173,6 +172,9 @@ function stopChallenge()
     document.getElementById("input").setAttribute("disabled", true);
     ctx.closePath();
     clearInterval(timer);
+    document.getElementById("textSelection").removeAttribute("disabled");
+    document.getElementById("swe").removeAttribute("disabled");
+    document.getElementById("eng").removeAttribute("disabled");
 }
 function updateStats()
 {
@@ -250,4 +252,4 @@ function updateStatsObject(event)
     }
 }
 
-window.addEventListener("load", pageSetup);
+window.addEventListener("load", loadXML);
