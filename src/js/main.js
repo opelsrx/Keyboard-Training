@@ -169,6 +169,7 @@ function stopChallenge()
 {
     updateStats();  // last update to make sure the correct stats are displayed
     document.getElementById("stop").setAttribute("id", "start");
+    document.getElementById("input").value = "";
     document.getElementById("input").setAttribute("disabled", true);
     ctx.closePath();
     clearInterval(timer);
