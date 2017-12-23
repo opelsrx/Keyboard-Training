@@ -47,7 +47,7 @@ body{
 }
 @keyframes label{
     from {color: black;}
-    50% {color: rgb(87, 65, 52);}
+    50% {color: rgb(39, 114, 98);}
     to {color: black;}
 }
 main{
@@ -123,6 +123,18 @@ main{
     display: block;
     margin: auto;
     text-align: center;
+}
+.wrongPress{
+    animation-name: colorAlert;
+    animation-iteration-count: 1;
+    animation-duration: 0.5s;
+}
+@keyframes colorAlert{
+    from {color: black;}
+    25% {color: red;}
+    50% {color: black;}
+    75% {color: red;}
+    to {color: black;}
 }
 .currentChar{
     background-color: rgba(0, 0, 0, 0.6);

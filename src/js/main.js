@@ -205,6 +205,7 @@ function updateStats()
     document.getElementById("net").innerHTML = stats.netWPM;  //More accurate than the one in the description
     document.getElementById("accuracy").innerHTML = stats.accuracy + "%";
     document.getElementById("errors").innerHTML = stats.errors;
+    document.getElementById("input").removeAttribute("class");
 }
 //================== Updates the stats-object that holds the stats of the game ==================
 function updateStatsObject(event)
@@ -240,6 +241,7 @@ function updateStatsObject(event)
             {
                 stats.errors++;
                 document.getElementById(stats.currentChar).setAttribute("class", "wrong");
+                document.getElementById("input").setAttribute("class", "wrongPress");
                 errorSound.pause();
                 errorSound.currentTime = 0;
                 errorSound.play();
