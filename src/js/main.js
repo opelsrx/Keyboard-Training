@@ -7,6 +7,8 @@
  * maha1611
  * maha1611@student.miun.se
  ******************************************************************************/
+
+//================== Global variables ==================
 let gameComplete = new Audio('./audio/complete.mp3');
 let errorSound = new Audio('./audio/error.mp3');
 let correctSound = new Audio('./audio/correct.mp3');
@@ -21,6 +23,7 @@ let lastX = 0, lastY = 100;
 let ctx;
 let xhttp = new XMLHttpRequest();
 
+//================== XMLHttpRequest to get the xml files containing the texts ==================
 xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
        // Typical action to be performed when the document is ready:
@@ -41,7 +44,7 @@ xhttp.onreadystatechange = function() {
         pageSetup(); // When the xml is loaded successfully set up the page.
     }
 };
-
+//================== Initiates the XMLHttpRequest ==================
 function loadXML()
 {
     //Loads the xml-files
@@ -49,9 +52,7 @@ function loadXML()
     xhttp.responseType = "document";
     xhttp.send();
 }
-
-
-// Initial page setup with eventlisteners etc.
+//================== Initial page setup with eventlisteners etc ==================
 function pageSetup()
 {
     //Event setup
@@ -67,7 +68,7 @@ function pageSetup()
     startStopBtn.addEventListener("click", handleStartStop);
     document.getElementById("inputField").appendChild(startStopBtn);
 }
-// Adds the options to the select tag
+//================== Adds the options to the select tag ==================
 function addOptions()
 {
     document.getElementById("textSelection").innerHTML = ""; // Reset the options
@@ -90,7 +91,7 @@ function addOptions()
     //Load text
     showText();
 }
-//Eventlistener functions
+//=============== Eventlistener function that displays the correct text depending on the current chosen option ===============
 function showText()
 {
     let select = document.getElementById("textSelection");
@@ -114,7 +115,7 @@ function showText()
         }
     })
 }
-
+//================== Evenlistener function that either stops or starts the game ==================
 function handleStartStop(event)
 {
     event = event || window.event;  // For older versions
@@ -123,7 +124,7 @@ function handleStartStop(event)
     if(targetElement.getAttribute("id") == "start") { startChallenge(); }
     else { stopChallenge(); }
 }
-
+//================== Resets the gamefield and starts the game ==================
 function startChallenge()
 {
     document.getElementById("start").setAttribute("id", "stop");
@@ -140,6 +141,7 @@ function startChallenge()
     document.getElementById("input").removeAttribute("disabled");
     document.getElementById("input").addEventListener("input", updateStatsObject);
     document.getElementById("input").focus();
+    document.getElementById("input").removeAttribute("placeholder");
     document.getElementById(0).setAttribute("class", "currentChar");
 
     timer = window.setInterval(updateStats, 1000);
@@ -148,6 +150,7 @@ function startChallenge()
     ctx = document.getElementById("myCanvas").getContext("2d");
     ctx.beginPath();
 }
+//================== Resets the gamefield ==================
 function clearGame()
 {
     document.getElementById("textSelection").setAttribute("disabled", true);
@@ -159,24 +162,26 @@ function clearGame()
         document.getElementById(i).removeAttribute("class");
     }
     document.getElementById("input").value  = "";
-    document.getElementById("input").setAttribute("placeholder", "Type here...");
     let canvas = document.getElementById("myCanvas");
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     lastX = 0;
     lastY = 100;
 }
+//================== Stops the game when either the stop button is pressed or the game is finished ==================
 function stopChallenge()
 {
     updateStats();  // last update to make sure the correct stats are displayed
     document.getElementById("stop").setAttribute("id", "start");
     document.getElementById("input").value = "";
     document.getElementById("input").setAttribute("disabled", true);
+    document.getElementById("input").setAttribute("placeholder", "Type here...");
     ctx.closePath();
     clearInterval(timer);
     document.getElementById("textSelection").removeAttribute("disabled");
     document.getElementById("swe").removeAttribute("disabled");
     document.getElementById("eng").removeAttribute("disabled");
 }
+//================== Updates the stats displayed on the screen ==================
 function updateStats()
 {
     let d = new Date();
@@ -201,7 +206,7 @@ function updateStats()
     document.getElementById("accuracy").innerHTML = stats.accuracy + "%";
     document.getElementById("errors").innerHTML = stats.errors;
 }
-
+//================== Updates the stats-object that holds the stats of the game ==================
 function updateStatsObject(event)
 {
     if(stats.currentChar + 1 < currentTextLength)
@@ -252,5 +257,5 @@ function updateStatsObject(event)
         stopChallenge();
     }
 }
-
+//== Eventlistener that runs the script when the site is fully loaded ==
 window.addEventListener("load", loadXML);
