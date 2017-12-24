@@ -148,6 +148,7 @@ function startChallenge()
     startTime = new Date();
 
     ctx = document.getElementById("myCanvas").getContext("2d");
+    ctx.lineWidth=0.3;
     ctx.beginPath();
 }
 //================== Resets the gamefield ==================
