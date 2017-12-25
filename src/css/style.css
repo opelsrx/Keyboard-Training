@@ -52,9 +52,9 @@ body{
     }
 }
 @keyframes label{
-    from {color: black;}
-    50% {color: rgb(39, 114, 98);}
-    to {color: black;}
+    from {color: black; text-shadow: 0 0 5px white;}
+    50% {color: darkblue; text-shadow: 0 0 5px red, 0 0 7px red, 0 0 10px red;}
+    to {color: black; text-shadow: 0 0 5px white;}
 }
 main{
     flex: 1;
