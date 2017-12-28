@@ -16,11 +16,11 @@ let xmlFile;
 let texts = [];
 
 let stats; // Contains the statistics of the game
-let timer;
+let timer;  // Used for timing the game
 let startTime;  // Game started at this time
 let currentTextLength;  // The chosen texts length
-let lastX = 0, lastY = 100;
-let ctx;
+let lastX = 0, lastY = 100; // Used by th canvas to draw from the correct place
+let canvasContext;    // Canvas 2D context
 let xhttp = new XMLHttpRequest();
 
 //================== XMLHttpRequest to get the xml files containing the texts ==================
@@ -41,7 +41,7 @@ xhttp.onreadystatechange = function() {
             tempObj.text = xmlFile.getElementsByTagName("text")[i].innerHTML;
             texts.push(tempObj);
         }
-        pageSetup(); // When the xml is loaded successfully set up the page.
+        pageSetup(); // When the xml is loaded successfully, set up the page. If the files doesn't load, the page wont work anyway.
     }
 };
 //================== Initiates the XMLHttpRequest ==================
@@ -107,8 +107,9 @@ function showText()
             let words = 1;
             for(let i  = 0; i < currentTextLength; i++)
             {
+                //Adds a <span> around every char with a unique id to be able to mark them when playing
                 document.getElementById("theText").innerHTML = document.getElementById("theText").innerHTML + '<span id="' + i + '">'+ entry['text'].charAt(i) +"</span>";
-                if(entry['text'].charAt(i) == " ") {words++;}
+                if(entry['text'].charAt(i) == " ") {words++;}   // the ammount of spaces plus 1 is the ammount of words.
             }
             document.getElementById("textHeader").innerHTML = entry['title'];
             document.getElementById("textAuthor").innerHTML = entry['author'] + "(" + words + " words, " + currentTextLength + " chars)";
@@ -128,6 +129,7 @@ function handleStartStop(event)
 function startChallenge()
 {
     document.getElementById("start").setAttribute("id", "stop");
+    //Reset all stats
     stats = {};
     stats.grossWPM = 0;
     stats.netWPM = 0;
@@ -136,20 +138,23 @@ function startChallenge()
     stats.currentChar = 0;
     stats.totalCharsTyped = 0;
 
-    clearGame();
+    clearGame(); //Reset game area
 
+    //New game setup
     document.getElementById("input").removeAttribute("disabled");
     document.getElementById("input").addEventListener("input", updateStatsObject);
     document.getElementById("input").focus();
     document.getElementById("input").removeAttribute("placeholder");
     document.getElementById(0).setAttribute("class", "currentChar");
 
+    //Timersetup
     timer = window.setInterval(updateStats, 1000);
     startTime = new Date();
 
-    ctx = document.getElementById("myCanvas").getContext("2d");
-    ctx.lineWidth=0.3;
-    ctx.beginPath();
+    //Canvas setup
+    canvasContext = document.getElementById("myCanvas").getContext("2d");
+    canvasContext.lineWidth=0.3;
+    canvasContext.beginPath();
 }
 //================== Resets the gamefield ==================
 function clearGame()
@@ -176,7 +181,7 @@ function stopChallenge()
     document.getElementById("input").value = "";
     document.getElementById("input").setAttribute("disabled", true);
     document.getElementById("input").setAttribute("placeholder", "Type here...");
-    ctx.closePath();
+    canvasContext.closePath();
     clearInterval(timer);
     document.getElementById("textSelection").removeAttribute("disabled");
     document.getElementById("swe").removeAttribute("disabled");
@@ -196,10 +201,10 @@ function updateStats()
     stats.netWPM = parseInt(((stats.totalCharsTyped - stats.errors) / 5)/elapsedMin, 10);
     stats.accuracy = parseInt((((stats.totalCharsTyped - stats.errors)/stats.totalCharsTyped) * 100), 10);
 
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(lastX += 4, 100 - stats.netWPM);
-    ctx.strokeStyle="#FFFF00";
-    ctx.stroke();
+    canvasContext.moveTo(lastX, lastY);
+    canvasContext.lineTo(lastX += 4, 100 - stats.netWPM);
+    canvasContext.strokeStyle="#FFFF00";
+    canvasContext.stroke();
     
     
     document.getElementById("gross").innerHTML = stats.grossWPM;
@@ -260,5 +265,5 @@ function updateStatsObject(event)
         stopChallenge();
     }
 }
-//== Eventlistener that runs the script when the site is fully loaded ==
+//== Eventlistener that runs the script when the html is fully loaded ==
 window.addEventListener("load", loadXML);
